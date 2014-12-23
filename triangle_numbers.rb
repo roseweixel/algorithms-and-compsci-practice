@@ -4,30 +4,44 @@
 # 1 + 2 + 3 + 4 = 10
 # 1 + 2 + 3 + 4 + 5 = 15
 
-def triangle_number_with_gt_n_divisors(n, triangle_number=1, num_to_add=2)
-  if divisors(triangle_number) > n
-    return triangle_number
-  else
+# def triangle_number_with_gt_n_divisors(n, triangle_number=1, num_to_add=2)
+#   if divisors(triangle_number) > n
+#     return triangle_number
+#   else
+#     triangle_number = triangle_number + num_to_add
+#     num_to_add += 1
+#     return triangle_number_with_gt_n_divisors(n, triangle_number, num_to_add)
+#   end
+# end
+
+def triangle_number_with_gt_n_divisors(n)
+  triangle_number = 1
+  num_to_add = 2
+  while divisors(triangle_number) <= n
     triangle_number = triangle_number + num_to_add
     num_to_add += 1
-    return triangle_number_with_gt_n_divisors(n, triangle_number, num_to_add)
   end
+  triangle_number
 end
 
 def divisors(number)
   if number <= 0
     return 0
   elsif number == 1
-    divisors = [1]
+    return 1
   else
-    divisors = [1, number]
-    (2..number-1).each do |candidate|
+    divisors = 2
+    (2..Math.sqrt(number).floor).each do |candidate|
       if number % candidate == 0
-        divisors << candidate
+        divisors += 2
       end
     end
+    if Math.sqrt(number).floor * Math.sqrt(number).floor == number
+      divisors -= 1
+    end
+    divisors
   end
-  divisors.count
 end
 
-puts triangle_number_with_gt_n_divisors(10, triangle_number=1, num_to_add=2)
+puts triangle_number_with_gt_n_divisors(500)
+
