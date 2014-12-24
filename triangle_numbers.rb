@@ -4,16 +4,6 @@
 # 1 + 2 + 3 + 4 = 10
 # 1 + 2 + 3 + 4 + 5 = 15
 
-# def triangle_number_with_gt_n_divisors(n, triangle_number=1, num_to_add=2)
-#   if divisors(triangle_number) > n
-#     return triangle_number
-#   else
-#     triangle_number = triangle_number + num_to_add
-#     num_to_add += 1
-#     return triangle_number_with_gt_n_divisors(n, triangle_number, num_to_add)
-#   end
-# end
-
 def triangle_number_with_gt_n_divisors(n)
   triangle_number = 1
   num_to_add = 2
