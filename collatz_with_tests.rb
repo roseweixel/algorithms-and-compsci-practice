@@ -24,10 +24,27 @@ class Collatz
   def collatz_sequence_for_num(num)
     sequence << num
     if num == 1
-      return sequence
+      result = sequence.dup
+      sequence.clear
+      return result
     else
       collatz_sequence_for_num(next_collatz(num))
     end
+  end
+
+  def longest_collatz(num)
+    longest_sequence_length_so_far = 0
+    num_with_longest_sequence_so_far = nil
+
+    (1..num).each do |n|
+      current_num_sequence_length = collatz_sequence_for_num(n).length
+      if current_num_sequence_length > longest_sequence_length_so_far
+        longest_sequence_length_so_far = current_num_sequence_length
+        num_with_longest_sequence_so_far = n
+      end
+    end
+
+    num_with_longest_sequence_so_far
   end
 end
 
@@ -50,5 +67,15 @@ describe "Collatz::collatz_sequence_for_num" do
 
   it "returns the correct collatz sequence for numbers greater than 1" do
     expect(collatz.collatz_sequence_for_num(3)).to eq([3, 10, 5, 16, 8, 4, 2, 1])
+    expect(collatz.collatz_sequence_for_num(5)).to eq([5, 16, 8, 4, 2, 1])
+  end
+end
+
+describe "Collatz::longest_collatz" do
+  let(:collatz) { Collatz.new }
+  it "given n, returns the number with the longest collatz sequence between 1 and n" do
+    expect(collatz.longest_collatz(1)).to eq(1)
+    expect(collatz.longest_collatz(3)).to eq(3)
+    expect(collatz.longest_collatz(5)).to eq(3)
   end
 end
