@@ -18,7 +18,7 @@ def balanced_parens?(string_of_parens)
   open_parens_so_far == close_parens_so_far
 end
 
-def balanced_delims?(string_of_delimiters)
+def substring_balanced?(string_of_delimiters)
   counter = {
               "(" => 0,
               "{" => 0,
@@ -37,6 +37,21 @@ def balanced_delims?(string_of_delimiters)
   end
 
   counter[")"] == counter["("] && counter["}"] == counter["{"] && counter["]"] == counter["["]
+end
+
+def balanced_delims?(string_of_delimiters)
+  if substring_balanced?(string_of_delimiters)
+    balanced = true
+    substrings = string_of_delimiters.match(/((?<=\()[^\(\)]*(?=\))|(?<=\[)[^\[\]]*(?=\])|(?<=\{)[^\{\}]*(?=\}))/).captures
+    substrings.each do |substring|
+      if !substring_balanced?(substring)
+        return false
+      end
+    end
+  else
+    balanced = false
+  end
+  balanced
 end
 
 describe "#balanced_parens?" do
@@ -126,9 +141,11 @@ describe "#balanced_delims?" do
     it "returns false when there any of the delimiters are not balanced" do
       string1 = "((({[{}]}))"
       string2 = "{}}(([{}]))([])"
+      string3 = "([)]"
 
       expect(balanced_delims?(string1)).to be false
       expect(balanced_delims?(string2)).to be false
+      expect(balanced_delims?(string3)).to be false
     end
   end
 end
