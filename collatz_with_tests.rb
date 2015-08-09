@@ -3,7 +3,6 @@
 # The collatz sequence for any given number is the sequence of numbers you get when following the steps described above until you reach 1. For example, the collatz sequence for 2 is [2, 1]. The collatz sequence for 3 is [3, 10, 5, 16, 8, 4, 2, 1].
 
 # Write a method, #longest_collatz, that takes a number n and returns the number between 1 and n that has the longest collatz sequence (the greatest number of steps to get to 1).
-require 'pry'
 
 class Collatz
   attr_accessor :sequence
@@ -23,9 +22,9 @@ class Collatz
   end
 
   def collatz_sequence_for_num(num)
-    @sequence << num
+    sequence << num
     if num == 1
-      return @sequence
+      return sequence
     else
       collatz_sequence_for_num(next_collatz(num))
     end
