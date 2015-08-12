@@ -1,33 +1,49 @@
-#[1,2,3,4] [0,0,4,7] => [1,1,2,3,4,4,7]
+require 'rspec'
+require 'pry'
 
 def merge_sort(array)
   if array.length <= 1
     return array
   else
-    left_sub_array = array.slice(0...array.length/2)
-    right_sub_array = array.slice(array.length/2...array.length)
-    return merge_sorted_arrays(merge_sort(left_sub_array), merge_sort(right_sub_array))
+    left_array = array[0...array.length/2]
+    right_array = array[array.length/2..-1]
+    return merge_sorted_arrays(merge_sort(left_array), merge_sort(right_array))
   end
 end
 
-def merge_sorted_arrays(arr1, arr2)
-  merged_array = []
-  arr1_index = 0
-  arr2_index = 0
-  while arr1_index < arr1.length && arr2_index < arr2.length
-    if arr1[arr1_index] > arr2[arr2_index]
-      merged_array.push(arr2[arr2_index])
-      arr2_index += 1
+def merge_sorted_arrays(array1, array2)
+  sorted_array = []
+  
+  array1_index = 0
+  array2_index = 0
+
+  while array1[array1_index] && array2[array2_index]
+    if array1[array1_index] < array2[array2_index]
+      sorted_array.push(array1[array1_index])
+      array1_index += 1
     else
-      merged_array.push(arr1[arr1_index])
-      arr1_index += 1
+      sorted_array.push(array2[array2_index])
+      array2_index += 1
     end
   end
-  unfinished_array = arr1_index < arr1.length ? arr1 : arr2
-  unfinished_index = arr1_index < arr1.length ? arr1_index : arr2_index
-  while unfinished_index < unfinished_array.length
-    merged_array.push(unfinished_array[unfinished_index])
-    unfinished_index += 1
+  if array1[array1_index]
+    unfinished_array = array1
+    unfinished_index = array1_index
+  else
+    unfinished_array = array2
+    unfinished_index = array2_index
   end
-  merged_array
+
+  unfinished_array[unfinished_index..-1].each do |num|
+    sorted_array.push(num)
+  end
+
+  sorted_array
+end
+
+describe '#merge_sort' do
+  it "returns a sorted array" do
+    unsorted_array = [6, 3, 4, 1, 7, 2, 9, 5, 6]
+    expect(merge_sort(unsorted_array)).to eq([1, 2, 3, 4, 5, 6, 6, 7, 9])
+  end
 end
