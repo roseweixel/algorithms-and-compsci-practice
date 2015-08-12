@@ -38,15 +38,16 @@ end
 
 def balanced_delims?(string_of_delimiters)
   expected_closing_delimiters = []
+
   string_of_delimiters.each_char do |char|
     if is_a_closing_delim?(char)
-      if expected_closing_delimiters.first != char
+      if expected_closing_delimiters.last != char
         return false
       else
-        expected_closing_delimiters.shift
+        expected_closing_delimiters.pop
       end
     elsif is_an_opening_delim?(char)
-      expected_closing_delimiters.unshift(closer_for(char))
+      expected_closing_delimiters.push(closer_for(char))
     end
   end
   expected_closing_delimiters.empty?
@@ -132,6 +133,7 @@ describe "#balanced_delims?" do
       string1 = "({[]})"
       string2 = "(({[][]}))"
       string3 = "[][]{{[(({{{{[]}}}}))]}}()"
+
       expect(balanced_delims?(string1)).to be true
       expect(balanced_delims?(string2)).to be true
       expect(balanced_delims?(string3)).to be true
@@ -150,81 +152,3 @@ describe "#balanced_delims?" do
     end
   end
 end
-
-# def balanced_delims?(string_of_delimiters)
-#   #binding.pry
-#   next_close = nil
-#   counter = {
-#               "(" => 0,
-#               "{" => 0,
-#               "[" => 0,
-#               ")" => 0,
-#               "}" => 0,
-#               "]" => 0
-#             }
-
-#   string_of_delimiters.each_char do |char|
-#     #binding.pry
-#     if (counter[")"] > counter["("] || counter["}"] > counter["{"] || counter["]"] > counter["["]) || violates_next_close(next_close, char)
-#       return false
-#     else
-#       if char == "("
-#         next_close = ")"
-#       elsif char == "{"
-#         next_close = "}"
-#       elsif char == "["
-#         next_close = "]"
-#       end
-#       #binding.pry
-#       counter[char] += 1 if counter[char]
-#     end
-#   end
-
-#   counter[")"] == counter["("] && counter["}"] == counter["{"] && counter["]"] == counter["["]
-# end
-
-# def violates_next_close(next_close, char)
-#   #binding.pry if next_close == "]" && char == ")"
-#   if char == "]" || char == "}" || char == ")" && next_close
-#     # binding.pry
-#     next_close != char
-#   else
-#     false
-#   end
-# end
-
-# def substring_balanced?(string_of_delimiters)
-#   counter = {
-#               "(" => 0,
-#               "{" => 0,
-#               "[" => 0,
-#               ")" => 0,
-#               "}" => 0,
-#               "]" => 0
-#             }
-
-#   string_of_delimiters.each_char do |char|
-#     if counter[")"] > counter["("] || counter["}"] > counter["{"] || counter["]"] > counter["["]
-#       return false
-#     else
-#       counter[char] += 1 if counter[char]
-#     end
-#   end
-
-#   counter[")"] == counter["("] && counter["}"] == counter["{"] && counter["]"] == counter["["]
-# end
-
-# def balanced_delims?(string_of_delimiters)
-#   if substring_balanced?(string_of_delimiters)
-#     balanced = true
-#     substrings = string_of_delimiters.match(/((?<=\()[^\(\)]*(?=\))|(?<=\[)[^\[\]]*(?=\])|(?<=\{)[^\{\}]*(?=\}))/).captures
-#     substrings.each do |substring|
-#       if !substring_balanced?(substring)
-#         return false
-#       end
-#     end
-#   else
-#     balanced = false
-#   end
-#   balanced
-# end
