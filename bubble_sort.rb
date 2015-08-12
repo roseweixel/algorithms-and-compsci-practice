@@ -1,5 +1,4 @@
 require 'rspec'
-require 'pry'
 
 def swap(array, index1, index2)
   swap = array[index1]
